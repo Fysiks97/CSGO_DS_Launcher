@@ -1,16 +1,14 @@
-#Region ;**** Directives created by AutoIt3Wrapper_GUI ****
+#region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=41821-steam-steam-logo.ico
 #AutoIt3Wrapper_Outfile=CSGO_DS_Launcher.exe
 #AutoIt3Wrapper_Outfile_x64=CSGO_DS_Launcher-x64.exe
 #AutoIt3Wrapper_Compression=4
 #AutoIt3Wrapper_UseUpx=n
-#AutoIt3Wrapper_Compile_Both=y
-#AutoIt3Wrapper_UseX64=y
-#AutoIt3Wrapper_Res_Fileversion=1.1.0.0
+#AutoIt3Wrapper_Res_Fileversion=1.2.0.0
 #AutoIt3Wrapper_Res_LegalCopyright=broodplank.net 2013
 #AutoIt3Wrapper_Run_Tidy=y
 #AutoIt3Wrapper_Run_Obfuscator=y
-#EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
+#endregion ;**** Directives created by AutoIt3Wrapper_GUI ****
 ;~ #NoTrayIcon#Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 ;Includes
 
@@ -25,12 +23,12 @@
 #include <Constants.au3>
 #include <Inet.au3>
 
-
-
+; COPYRIGHT 2013 broodplank.net
+; This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License
 
 If Not FileExists(@ScriptDir & "\steamcmd.exe") Then FileInstall("D:\csgo-ds\steamcmd.exe", @ScriptDir & "\steamcmd.exe")
 
-$GUI = GUICreate("CS:GO DS Launcher v1.1 - by broodplank", 250, 575, -1, -1, $WS_SIZEBOX);-1, $WS_EX_TOOLWINDOW)
+$GUI = GUICreate("CS:GO DS Launcher v1.2 - by broodplank", 250, 575, -1, -1, $WS_SIZEBOX);-1, $WS_EX_TOOLWINDOW)
 GUISetBkColor(0x4C5844, $GUI)
 
 GUICtrlCreateGroup("SteamCMD", 5, 5, 240, 103)
@@ -50,11 +48,11 @@ GUICtrlSetBkColor(-1, 0xffffff)
 GUICtrlCreateLabel("Game Mode:", 15, 135)
 GUICtrlSetColor(-1, 0xffffff)
 $gamemode = GUICtrlCreateCombo("Classic Casual", 85, 132, 155, 20, $CBS_DROPDOWNLIST)
-GUICtrlSetData($gamemode, "Classic Competitive|Arms Race|Demolition", "Classic Casual")
+GUICtrlSetData($gamemode, "Classic Competitive|Arms Race|Demolition|Deathmatch", "Classic Casual")
 GUICtrlCreateLabel("Map Group:", 15, 165)
 GUICtrlSetColor(-1, 0xffffff)
 $mapgroup = GUICtrlCreateCombo("mg_bomb", 85, 162, 155, 20, $CBS_DROPDOWNLIST)
-GUICtrlSetData($mapgroup, "mg_armsrace|mg_demolition", "mg_bomb")
+GUICtrlSetData($mapgroup, "mg_bomb_se|mg_armsrace|mg_demolition|mg_allclassic", "mg_bomb")
 GUICtrlCreateLabel("Map:", 15, 195)
 GUICtrlSetColor(-1, 0xffffff)
 $map = GUICtrlCreateInput("de_dust", 85, 192, 155, 20)
@@ -104,7 +102,6 @@ EndIf
 
 
 
-
 GUISetState()
 
 While 1
@@ -112,6 +109,22 @@ While 1
 	$msg = GUIGetMsg()
 
 	Select
+
+		Case $msg = $gamemode And GUICtrlRead($gamemode) = "Classic Casual"
+			GUICtrlSetData($mapgroup, "mg_bomb")
+
+		Case $msg = $gamemode And GUICtrlRead($gamemode) = "Classic Competitive"
+			GUICtrlSetData($mapgroup, "mg_bomb_se")
+
+		Case $msg = $gamemode And GUICtrlRead($gamemode) = "Arms Race"
+			GUICtrlSetData($mapgroup, "mg_armsrace")
+
+		Case $msg = $gamemode And GUICtrlRead($gamemode) = "Demolition"
+			GUICtrlSetData($mapgroup, "mg_demolition")
+
+		Case $msg = $gamemode And GUICtrlRead($gamemode) = "Deathmatch"
+			GUICtrlSetData($mapgroup, "mg_allclassic")
+
 
 		Case $msg = $gui_event_close Or $msg = $exitlauncher
 			Exit
@@ -144,6 +157,11 @@ While 1
 			If GUICtrlRead($gamemode) = "Demolition" Then
 				$game_type = 1
 				$game_mode = 1
+			EndIf
+
+			If GUICtrlRead($gamemode) = "Deathmatch" Then
+				$game_type = 1
+				$game_mode = 2
 			EndIf
 
 			If GUICtrlRead($network) = "Internet" Then
@@ -255,6 +273,11 @@ Func _Implement()
 					$game_mode = 1
 				EndIf
 
+				If GUICtrlRead($gamemode) = "Deathmatch" Then
+					$game_type = 1
+					$game_mode = 2
+				EndIf
+
 				If GUICtrlRead($network) = "Internet" Then
 					$sv_lan = 0
 				EndIf
@@ -281,11 +304,10 @@ EndFunc   ;==>_Implement
 
 Func _Advanced()
 
-	Local $sizegui = WinGetPos("CS:GO DS Launcher v1.1 - by broodplank")
+	Local $sizegui = WinGetPos("CS:GO DS Launcher v1.2 - by broodplank")
 	ConsoleWrite($sizegui[0] + $sizegui[2] & @CRLF & $sizegui[1])
 
 	$advancedgui = GUICreate("Addon Integration", 250, 120, $sizegui[2] + 20, -1, -1, BitOR($WS_EX_TOOLWINDOW, $WS_EX_MDICHILD), $GUI)
-;~ 	$advancedgui = GUICreate("Addon Integration", 250, 100,  250, 120, $sizegui[0] + $sizegui[2] + 50, $sizegui[1], -1, BitOR($WS_EX_TOOLWINDOW, $WS_EX_MDICHILD), $gui)
 	GUISetBkColor(0xefefef, $advancedgui)
 
 	GUICtrlCreateLabel("Install Metamod Source to your Dedicated Server" & @CRLF & "This is the base for all other addons", 5, 5)
@@ -320,7 +342,7 @@ Func _Advanced()
 
 				GUICtrlSetState($advanced_metamod, $GUI_DISABLE)
 				SplashTextOn("Metamod Source", "Downloading Metamod Source..", 250, 20, $size[0], $size[1] + 160, 33, "Verdana", 8, 8)
-				InetGet("http://www.metamodsource.net/mmsdrop/1.10/mmsource-1.10.0-hg814-windows.zip", @ScriptDir & "\mms.zip", 1, 0)
+				InetGet("http://www.metamodsource.net/mmsdrop/1.10/mmsource-1.10.0-hg830-windows.zip", @ScriptDir & "\mms.zip", 1, 0)
 				SplashTextOn("Metamod Source", "Checking if server is running...", 250, 20, $size[0], $size[1] + 160, 33, "Verdana", 8, 8)
 				Sleep(1000)
 				If ProcessExists("srcds.exe") Then
@@ -356,7 +378,7 @@ Func _Advanced()
 
 				GUICtrlSetState($advanced_sourcemod, $GUI_DISABLE)
 				SplashTextOn("SourceMod", "Downloading SourceMod..", 250, 20, $size[0], $size[1] + 160, 33, "Verdana", 8, 8)
-				InetGet("http://www.sourcemod.net/smdrop/1.5/sourcemod-1.5.0-hg3777-windows.zip", @ScriptDir & "\sm.zip", 1, 0)
+				InetGet("http://www.sourcemod.net/smdrop/1.5/sourcemod-1.5.0-hg3830-windows.zip", @ScriptDir & "\sm.zip", 1, 0)
 				SplashTextOn("SourceMod", "Checking if server is running...", 250, 20, $size[0], $size[1] + 160, 33, "Verdana", 8, 8)
 				Sleep(1000)
 				If ProcessExists("srcds.exe") Then
@@ -389,8 +411,3 @@ Func _Advanced()
 
 
 EndFunc   ;==>_Advanced
-
-
-
-
-
