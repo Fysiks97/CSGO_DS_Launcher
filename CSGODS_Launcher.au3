@@ -1,9 +1,11 @@
 #region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=41821-steam-steam-logo.ico
-#AutoIt3Wrapper_Outfile=CSGO_DS_Launcher.exe
-#AutoIt3Wrapper_Outfile_x64=CSGO_DS_Launcher-x64.exe
+#AutoIt3Wrapper_Outfile=bin/CSGO_DS_Launcher.exe
+#AutoIt3Wrapper_Outfile_x64=bin/CSGO_DS_Launcher-x64.exe
 #AutoIt3Wrapper_Compression=4
 #AutoIt3Wrapper_UseUpx=n
+#AutoIt3Wrapper_Compile_Both=y
+#AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_Res_Fileversion=1.2.0.0
 #AutoIt3Wrapper_Res_LegalCopyright=broodplank.net 2013
 #AutoIt3Wrapper_Run_Tidy=y
