@@ -1,16 +1,16 @@
-#region ;**** Directives created by AutoIt3Wrapper_GUI ****
+#Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=41821-steam-steam-logo.ico
-#AutoIt3Wrapper_Outfile=bin/CSGO_DS_Launcher.exe
-#AutoIt3Wrapper_Outfile_x64=bin/CSGO_DS_Launcher-x64.exe
+#AutoIt3Wrapper_Outfile=CSGO_DS_Launcher.exe
+#AutoIt3Wrapper_Outfile_x64=CSGO_DS_Launcher-x64.exe
 #AutoIt3Wrapper_Compression=4
 #AutoIt3Wrapper_UseUpx=n
 #AutoIt3Wrapper_Compile_Both=y
 #AutoIt3Wrapper_UseX64=y
-#AutoIt3Wrapper_Res_Fileversion=1.2.0.0
-#AutoIt3Wrapper_Res_LegalCopyright=broodplank.net 2013
+#AutoIt3Wrapper_Res_Fileversion=1.3.0.0
+#AutoIt3Wrapper_Res_LegalCopyright=broodplank.net 2015
 #AutoIt3Wrapper_Run_Tidy=y
 #AutoIt3Wrapper_Run_Obfuscator=y
-#endregion ;**** Directives created by AutoIt3Wrapper_GUI ****
+#EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 ;~ #NoTrayIcon#Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 ;Includes
 
@@ -25,75 +25,84 @@
 #include <Constants.au3>
 #include <Inet.au3>
 
-; COPYRIGHT 2013 broodplank.net
-; This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License
+
+
 
 If Not FileExists(@ScriptDir & "\steamcmd.exe") Then FileInstall("D:\csgo-ds\steamcmd.exe", @ScriptDir & "\steamcmd.exe")
 
-$GUI = GUICreate("CS:GO DS Launcher v1.2 - by broodplank", 250, 575, -1, -1, $WS_SIZEBOX);-1, $WS_EX_TOOLWINDOW)
+$GUI = GUICreate("CS:GO DS Launcher v1.3 - by broodplank", 300, 665, -1, -1, $WS_SIZEBOX);-1, $WS_EX_TOOLWINDOW)
 GUISetBkColor(0x4C5844, $GUI)
 
-GUICtrlCreateGroup("SteamCMD", 5, 5, 240, 103)
+GUICtrlCreateGroup("SteamCMD", 5, 5, 290, 103)
 GUICtrlSetBkColor(-1, 0xffffff)
 GUICtrlCreateLabel("Username:", 15, 25)
 GUICtrlSetColor(-1, 0xffffff)
-$username = GUICtrlCreateInput("csgodsaccount1338", 85, 23, 155, 20)
+$username = GUICtrlCreateInput("csgodsaccount1338", 100, 23, 190, 20)
 GUICtrlCreateLabel("Password:", 15, 55)
 GUICtrlSetColor(-1, 0xffffff)
-$password = GUICtrlCreateInput("broodplank.net", 85, 53, 155, 20)
+$password = GUICtrlCreateInput("broodplank.net", 100, 53, 190, 20)
 GUICtrlCreateLabel("Dest. dir:", 15, 85)
 GUICtrlSetColor(-1, 0xffffff)
-$tardir = GUICtrlCreateInput(".\cs_go\", 85, 82, 155, 20)
+$tardir = GUICtrlCreateInput(".\cs_go\", 100, 82, 190, 20)
 GUICtrlSetState($tardir, $GUI_DISABLE)
-GUICtrlCreateGroup("SRCDS", 5, 115, 240, 350)
+GUICtrlCreateGroup("SRCDS", 5, 115, 290, 440)
 GUICtrlSetBkColor(-1, 0xffffff)
 GUICtrlCreateLabel("Game Mode:", 15, 135)
 GUICtrlSetColor(-1, 0xffffff)
-$gamemode = GUICtrlCreateCombo("Classic Casual", 85, 132, 155, 20, $CBS_DROPDOWNLIST)
+$gamemode = GUICtrlCreateCombo("Classic Casual", 100, 132, 190, 20, $CBS_DROPDOWNLIST)
 GUICtrlSetData($gamemode, "Classic Competitive|Arms Race|Demolition|Deathmatch", "Classic Casual")
 GUICtrlCreateLabel("Map Group:", 15, 165)
 GUICtrlSetColor(-1, 0xffffff)
-$mapgroup = GUICtrlCreateCombo("mg_bomb", 85, 162, 155, 20, $CBS_DROPDOWNLIST)
-GUICtrlSetData($mapgroup, "mg_bomb_se|mg_armsrace|mg_demolition|mg_allclassic", "mg_bomb")
+$mapgroup = GUICtrlCreateCombo("mg_active", 100, 162, 190, 20, $CBS_DROPDOWNLIST)
+GUICtrlSetData($mapgroup, "mg_armsrace|mg_demolition|mg_allclassic", "mg_active")
 GUICtrlCreateLabel("Map:", 15, 195)
 GUICtrlSetColor(-1, 0xffffff)
-$map = GUICtrlCreateInput("de_dust", 85, 192, 155, 20)
+$map = GUICtrlCreateInput("de_dust", 100, 192, 190, 20)
 GUICtrlCreateLabel("Max Players:", 15, 225)
 GUICtrlSetColor(-1, 0xffffff)
-$maxplayers = GUICtrlCreateCombo("4", 85, 222, 155, 20, $CBS_DROPDOWNLIST)
+$maxplayers = GUICtrlCreateCombo("4", 100, 222, 190, 20, $CBS_DROPDOWNLIST)
 GUICtrlSetData($maxplayers, "5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32", "20")
 GUICtrlCreateLabel("Rcon Pass:", 15, 255)
 GUICtrlSetColor(-1, 0xffffff)
-$rconpass = GUICtrlCreateInput("password", 85, 252, 155, 20)
+$rconpass = GUICtrlCreateInput("password", 100, 252, 190, 20)
 GUICtrlCreateLabel("Server Pass:", 15, 285)
 GUICtrlSetColor(-1, 0xffffff)
-$serverpass = GUICtrlCreateInput("", 85, 282, 155, 20)
+$serverpass = GUICtrlCreateInput("", 100, 282, 190, 20)
 GUICtrlCreateLabel("Tickrate:", 15, 315)
 GUICtrlSetColor(-1, 0xffffff)
-$tickrate = GUICtrlCreateCombo("64", 85, 312, 155, 20, $CBS_DROPDOWNLIST)
+$tickrate = GUICtrlCreateCombo("64", 100, 312, 190, 20, $CBS_DROPDOWNLIST)
 GUICtrlSetData($tickrate, "128", "64")
 GUICtrlCreateLabel("IP:", 15, 345)
 GUICtrlSetColor(-1, 0xffffff)
-$ip = GUICtrlCreateInput(@IPAddress1, 85, 342, 155, 20)
+$ip = GUICtrlCreateInput(@IPAddress1, 100, 342, 190, 20)
 GUICtrlCreateLabel("Port:", 15, 375)
 GUICtrlSetColor(-1, 0xffffff)
-$port = GUICtrlCreateInput("27015", 85, 372, 155, 20)
+$port = GUICtrlCreateInput("27015", 100, 372, 190, 20)
 GUICtrlCreateLabel("Network:", 15, 405)
 GUICtrlSetColor(-1, 0xffffff)
-$network = GUICtrlCreateCombo("Internet", 85, 402, 155, 20, $CBS_DROPDOWNLIST)
+$network = GUICtrlCreateCombo("Internet", 100, 402, 190, 20, $CBS_DROPDOWNLIST)
 GUICtrlSetData($network, "Lan", "Internet")
 GUICtrlCreateLabel("Server Name:", 15, 435)
 GUICtrlSetColor(-1, 0xffffff)
-$name = GUICtrlCreateInput("CSGO Dedicated Server", 85, 432, 155, 20)
+$name = GUICtrlCreateInput("CSGO Dedicated Server", 100, 432, 190, 20)
+GUICtrlCreateLabel("Workshop id:", 15, 465)
+GUICtrlSetColor(-1, 0xffffff)
+$workshopcollection = GUICtrlCreateInput("", 100, 462, 190, 20, $ES_NUMBER)
+GUICtrlCreateLabel("Workshop map:", 15, 495)
+GUICtrlSetColor(-1, 0xffffff)
+$workshopmap = GUICtrlCreateInput("", 100, 492, 190, 20, $ES_NUMBER)
+GUICtrlCreateLabel("Web API-Key: ", 15, 525)
+GUICtrlSetColor(-1, 0xffffff)
+$webapi = GUICtrlCreateInput("", 100, 522, 190, 20)
 
-$installcsgo = GUICtrlCreateButton("Install/Update Server", 5, 470, 120, 20, $BS_FLAT)
-$validatecsgo = GUICtrlCreateButton("Validate CS:GO files", 125, 470, 120, 20, $BS_FLAT)
-$startsrcds = GUICtrlCreateButton("Start Server", 5, 510, 120, 20, $BS_FLAT)
-$exitlauncher = GUICtrlCreateButton("Exit Launcher", 125, 510, 120, 20, $BS_FLAT)
-$advanced = GUICtrlCreateButton("Addon Integration", 5, 490, 120, 20, $BS_FLAT)
-$implement = GUICtrlCreateButton("Implement CS:GO DS", 125, 490, 120, 20, $BS_FLAT)
+$installcsgo = GUICtrlCreateButton("Install/Update Server", 5, 560, 145, 20, $BS_FLAT)
+$validatecsgo = GUICtrlCreateButton("Validate CS:GO files", 150, 560, 145, 20, $BS_FLAT)
+$startsrcds = GUICtrlCreateButton("Start Server", 5, 600, 145, 20, $BS_FLAT)
+$exitlauncher = GUICtrlCreateButton("Exit Launcher", 150, 600, 145, 20, $BS_FLAT)
+$advanced = GUICtrlCreateButton("Addon Integration", 5, 580, 145, 20, $BS_FLAT)
+$implement = GUICtrlCreateButton("Implement CS:GO DS", 150, 580, 145, 20, $BS_FLAT)
 
-$copyright = GUICtrlCreateLabel("©2013 broodplank.net - All Rights Reserved", 5, 535)
+$copyright = GUICtrlCreateLabel("©2015 broodplank.net - All Rights Reserved", 5, 625)
 
 $checkreg = RegRead("HKEY_CURRENT_USER\Software\CSGODSLauncher", "Check")
 If $checkreg = 0 Or $checkreg = "" Then
@@ -104,6 +113,7 @@ EndIf
 
 
 
+
 GUISetState()
 
 While 1
@@ -111,22 +121,6 @@ While 1
 	$msg = GUIGetMsg()
 
 	Select
-
-		Case $msg = $gamemode And GUICtrlRead($gamemode) = "Classic Casual"
-			GUICtrlSetData($mapgroup, "mg_bomb")
-
-		Case $msg = $gamemode And GUICtrlRead($gamemode) = "Classic Competitive"
-			GUICtrlSetData($mapgroup, "mg_bomb_se")
-
-		Case $msg = $gamemode And GUICtrlRead($gamemode) = "Arms Race"
-			GUICtrlSetData($mapgroup, "mg_armsrace")
-
-		Case $msg = $gamemode And GUICtrlRead($gamemode) = "Demolition"
-			GUICtrlSetData($mapgroup, "mg_demolition")
-
-		Case $msg = $gamemode And GUICtrlRead($gamemode) = "Deathmatch"
-			GUICtrlSetData($mapgroup, "mg_allclassic")
-
 
 		Case $msg = $gui_event_close Or $msg = $exitlauncher
 			Exit
@@ -176,10 +170,7 @@ While 1
 
 			_StoreData()
 
-
-
-			Run(GUICtrlRead($tardir) & "srcds.exe -console -usercon -game csgo +game_type " & $game_type & " +game_mode " & $game_mode & " +mapgroup " & GUICtrlRead($mapgroup) & " +map " & GUICtrlRead($map) & " -maxplayers_override " & GUICtrlRead($maxplayers) & " +rcon_password " & GUICtrlRead($rconpass) & " +sv_password " & Chr(34) & GUICtrlRead($serverpass) & Chr(34) & " +sv_lan " & $sv_lan & " -tickrate " & GUICtrlRead($tickrate) & " -port " & GUICtrlRead($port) & " +hostname " & Chr(34) & GUICtrlRead($name) & Chr(34))
-
+			Run(GUICtrlRead($tardir) & "srcds.exe -console -usercon -game csgo +game_type " & $game_type & " +game_mode " & $game_mode & " +mapgroup " & GUICtrlRead($mapgroup) & " +map " & GUICtrlRead($map) & " -maxplayers_override " & GUICtrlRead($maxplayers) & " +rcon_password " & GUICtrlRead($rconpass) & " +sv_password " & Chr(34) & GUICtrlRead($serverpass) & Chr(34) & " +sv_lan " & $sv_lan & " -tickrate " & GUICtrlRead($tickrate) & " -port " & GUICtrlRead($port) & " +hostname " & Chr(34) & GUICtrlRead($name) & Chr(34) & " +host_workshop_collection " & Chr(34) & GUICtrlRead($workshopcollection) & Chr(34) & " +workshop_start_map " & Chr(34) & GUICtrlRead($workshopmap) & Chr(34) & " -authkey " & Chr(34) & GUICtrlRead($webapi) & Chr(34))
 
 		Case $msg = $implement
 			_Implement()
@@ -275,11 +266,6 @@ Func _Implement()
 					$game_mode = 1
 				EndIf
 
-				If GUICtrlRead($gamemode) = "Deathmatch" Then
-					$game_type = 1
-					$game_mode = 2
-				EndIf
-
 				If GUICtrlRead($network) = "Internet" Then
 					$sv_lan = 0
 				EndIf
@@ -306,10 +292,11 @@ EndFunc   ;==>_Implement
 
 Func _Advanced()
 
-	Local $sizegui = WinGetPos("CS:GO DS Launcher v1.2 - by broodplank")
+	Local $sizegui = WinGetPos("CS:GO DS Launcher v1.3 - by broodplank")
 	ConsoleWrite($sizegui[0] + $sizegui[2] & @CRLF & $sizegui[1])
 
 	$advancedgui = GUICreate("Addon Integration", 250, 120, $sizegui[2] + 20, -1, -1, BitOR($WS_EX_TOOLWINDOW, $WS_EX_MDICHILD), $GUI)
+;~ 	$advancedgui = GUICreate("Addon Integration", 250, 100,  250, 120, $sizegui[0] + $sizegui[2] + 50, $sizegui[1], -1, BitOR($WS_EX_TOOLWINDOW, $WS_EX_MDICHILD), $gui)
 	GUISetBkColor(0xefefef, $advancedgui)
 
 	GUICtrlCreateLabel("Install Metamod Source to your Dedicated Server" & @CRLF & "This is the base for all other addons", 5, 5)
@@ -344,7 +331,7 @@ Func _Advanced()
 
 				GUICtrlSetState($advanced_metamod, $GUI_DISABLE)
 				SplashTextOn("Metamod Source", "Downloading Metamod Source..", 250, 20, $size[0], $size[1] + 160, 33, "Verdana", 8, 8)
-				InetGet("http://www.metamodsource.net/mmsdrop/1.10/mmsource-1.10.0-hg830-windows.zip", @ScriptDir & "\mms.zip", 1, 0)
+				InetGet("http://www.metamodsource.net/mmsdrop/1.11/mmsource-1.11.0-git931-windows.zip", @ScriptDir & "\mms.zip", 1, 0)
 				SplashTextOn("Metamod Source", "Checking if server is running...", 250, 20, $size[0], $size[1] + 160, 33, "Verdana", 8, 8)
 				Sleep(1000)
 				If ProcessExists("srcds.exe") Then
@@ -380,7 +367,7 @@ Func _Advanced()
 
 				GUICtrlSetState($advanced_sourcemod, $GUI_DISABLE)
 				SplashTextOn("SourceMod", "Downloading SourceMod..", 250, 20, $size[0], $size[1] + 160, 33, "Verdana", 8, 8)
-				InetGet("http://www.sourcemod.net/smdrop/1.5/sourcemod-1.5.0-hg3830-windows.zip", @ScriptDir & "\sm.zip", 1, 0)
+				InetGet("http://www.sourcemod.net/smdrop/2.0/sourcemod-2.0.0-windows-r3689-20120917063515.zip", @ScriptDir & "\sm.zip", 1, 0)
 				SplashTextOn("SourceMod", "Checking if server is running...", 250, 20, $size[0], $size[1] + 160, 33, "Verdana", 8, 8)
 				Sleep(1000)
 				If ProcessExists("srcds.exe") Then
@@ -413,3 +400,8 @@ Func _Advanced()
 
 
 EndFunc   ;==>_Advanced
+
+
+
+
+
